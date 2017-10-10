@@ -1,13 +1,20 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import loadData from './loadData'
 import CommentInput from './commentInput'
 import CommentList from './commentList'
 import './index.css'
 
-export default class CommentApp extends Component {
-  constructor() {
-    super()
+class CommentApp extends Component {
+  static propTypes = {
+    data: PropTypes.any,
+    saveData: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props)
     this.state = {
-      comments: []
+      comments: props.data
     }
   }
 
@@ -19,30 +26,16 @@ export default class CommentApp extends Component {
     this.setState({
       comments: comments
     })
-    this._saveComments(comments)
+    // HOC 改造
+    this.props.saveData(comments)
   }
 
   handleDeleteComment = (index) => {
     const comments = this.state.comments
     comments.splice(index, 1)
     this.setState({comments})
-    this._saveComments(comments)
-  }
-
-  componentWillMount() {
-    this._loaderComments()
-  }
-  
-  _loaderComments() {
-    let comments = sessionStorage.getItem('comments') 
-    if (comments) {
-      comments = JSON.parse(comments)
-      this.setState({comments})
-    }
-  }
-
-  _saveComments(comments) {
-    sessionStorage.setItem('comments', JSON.stringify(comments))
+    // HOC 改造
+    this.props.saveData(comments)
   }
 
   render() {
@@ -55,3 +48,7 @@ export default class CommentApp extends Component {
     )
   }
 }
+
+CommentApp = loadData(CommentApp, 'comments')
+
+export default CommentApp

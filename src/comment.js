@@ -33,6 +33,15 @@ export default class Comment extends Component {
     clearInterval(this._timer)
   }
 
+  _getProcessContent = (content) => {
+    return content.replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/"/g, "&quot;")
+                  .replace(/'/g, "&#039;")
+                  .replace(/`([\S\s]+?)`/g, '<code>$1</code>')
+  }
+
   _updateTimeString() {
     const createTime = this.props.comment.createTime
     const duration = (+Date.now() - createTime) / 1000
@@ -42,12 +51,14 @@ export default class Comment extends Component {
   }
 
   render() {
+    const {comment} = this.props
     return (
       <div className="comment">
         <div className='comment-user'>
-          <span>{this.props.comment.username} </span>：
+          <span>{comment.username} </span>：
         </div>
-        <p>{this.props.comment.content}</p>
+        <p dangerouslySetInnerHTML={{__html: this._getProcessContent(comment.content)}}
+        />
         <span className="comment-createdtime">{this.state.timeString}</span>
         <span className="comment-delete"
               onClick={this.handleDeleteComment}>删除</span>

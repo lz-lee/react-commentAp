@@ -1,15 +1,24 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import loadData from './loadData'
 
-export default class CommentInput extends Component {
-  constructor() {
-    super()
+class CommentInput extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func,
+    data: PropTypes.string,
+    saveData: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props)
     this.state = {
-      username: '',
+      username: props.data,
       content: ''
     }
   }
   handleUsernameBlur = (e) => {
-    this._saveUsername(e.target.value)
+    // this._saveUsername(e.target.value)
+    this.props.saveData(e.target.value)
   }
 
   handleUsernameChange = (e) => {
@@ -38,27 +47,9 @@ export default class CommentInput extends Component {
     })
   }
 
-  // 将要挂载获取数据， 相当于vue 的created
-  componentWillMount() {
-    this._loaderUsername()  
-  }
-
   // 挂载完可以获取dom元素，相当于vue 的 mounted
   componentDidMount() {
     this.textarea.focus()
-  }
-
-  _loaderUsername() {
-    const username = sessionStorage.getItem('username')
-    if (username) {
-      this.setState({
-        username: username
-      })
-    }
-  }
-
-  _saveUsername(username) {
-    sessionStorage.setItem('username', username)
   }
 
   render() {
@@ -88,3 +79,7 @@ export default class CommentInput extends Component {
     )
   }
 }
+
+CommentInput = loadData(CommentInput, 'name')
+
+export default CommentInput

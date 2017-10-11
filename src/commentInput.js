@@ -5,14 +5,18 @@ import loadData from './loadData'
 class CommentInput extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
-    data: PropTypes.string,
+    data: PropTypes.any,
     saveData: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    data: ''
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      username: props.data,
+      username: props.data || '',
       content: ''
     }
   }

@@ -1,28 +1,32 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import loadData from './loadData'
+// import loadData from './loadData'
 
 class CommentInput extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
-    data: PropTypes.any,
-    saveData: PropTypes.func.isRequired
+    username: PropTypes.any,
+    onHandleUsernameBlur: PropTypes.func
   }
 
   static defaultProps = {
-    data: ''
+    username: ''
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      username: props.data || '',
+      username: props.username || '',
       content: ''
     }
   }
   handleUsernameBlur = (e) => {
     // this._saveUsername(e.target.value)
-    this.props.saveData(e.target.value)
+    // this.props.saveData(e.target.value)
+    console.log(this.props)
+    if (this.props.onHandleUsernameBlur) {
+      this.props.onHandleUsernameBlur(e.target.value)
+    }
   }
 
   handleUsernameChange = (e) => {
@@ -83,7 +87,5 @@ class CommentInput extends Component {
     )
   }
 }
-
-CommentInput = loadData(CommentInput, 'name')
 
 export default CommentInput

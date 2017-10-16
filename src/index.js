@@ -1,8 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import CommentApp from './commentApp'
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+import CommentApp from './components/commentApp'
+import commentReducer from './reducers/comments'
+import './index.css'
+
+const store = createStore(commentReducer)
 
 ReactDOM.render(
-  <CommentApp />,
+  <Provider store={store}>
+    <CommentApp />
+  </Provider>,
   document.getElementById('root')
 )
